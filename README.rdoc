@@ -1,0 +1,62 @@
+= UpyunRainbow -- simple util for migrating existing files to http://upyun.com
+
+A simple REST client for Ruby, inspired by the rest-client style
+of specifying actions: get, put, post, delete.
+
+== Installation:
+ 
+   in your Gemfile: 
+
+   gem "upyun-rainbow"
+
+== Usage: 
+
+  require 'upyun-rainbow'
+
+  $ util = UpyunRainbow::Util.new "your_bucket_name", "upyun_operator", "password"
+
+By default, the upyun api host is http://v0.api.upyun.com, if you want to pick someone else you can do it like this:
+
+  $ util = UpyunRainbow::Util.new "your_bucket_name", "upyun_operator", "password", "http://some/other/api/host"
+  
+After initialize, to upload a file:
+
+  $ util.post "http://your-bind-domain.com/some/relative/path/pic.jpg", File.read("/Users/tim/Desktop/a.jpg")
+  # => [:ok, 200] 
+
+Rainbow will return an two elements arry as result, the first of which determines the process result; the second is a http status code, which helps to debug if any unexpected error occurs.
+
+To remove a file:
+
+  $ util.delete "http://your-bind-domain.com/file/to/remove.txt"
+  # => [:ok, 200]
+
+To update an existing file:
+
+  $ util.put "http://your-bind-domain.com/some/relative/path/pic.jpg", File.read("/Users/tim/Desktop/a.jpg")
+  # => [:ok, 200]
+
+To determine a file existance:
+  $ util.get "http://your-bind-domain.com/file/if/exists.txt"
+  # => [:error, 404]
+
+== Global Setting
+
+To follow the DRY principle, initialize an UpyunRainbow object no need to specify bucket name, operator and password.
+
+  rails-app$ rails g upyun_configuration  generate_configatrion
+
+This will copy an upyun settings file to the initializers directory, modify that file, fill in your details and the initialize will be more elegant.
+
+  $ util = UpyunRainbow::Util.new #this will use the system wide bucket info you specified in the initializer
+
+  $ util.post "http://your-bind-domain.com/some/relative/path/pic.jpg", File.read("/Users/tim/Desktop/a.jpg")
+  # => [:ok, 200]
+
+  $ util = UpyunRainbow::Util.new "some-other-bucket", "not-default-operator", "password" #use an customize bucket etc
+  $ util.delete "some http resource"
+
+
+== Copyright
+
+Copyright © 2011 tim.teng. See LICENSE for details.
