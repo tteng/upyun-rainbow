@@ -44,7 +44,7 @@ To determine a file existance:
 
 To follow the DRY principle, initialize an UpyunRainbow object no need to specify bucket name, operator and password.
 
-  rails-app$ rails g upyun_configuration  generate_configatrion
+  rails-app$ rails g upyun_configuration generate_configuration
 
 This will copy an upyun settings file to the initializers directory, modify that file, fill in your details and the initialize will be more elegant.
 
